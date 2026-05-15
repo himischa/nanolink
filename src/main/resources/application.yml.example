@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/nanolink_db
-    username: nanolink_user
-    password: yourpassword
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/nanolink_db}
+    username: ${SPRING_DATASOURCE_USERNAME:nanolink_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:${NANOLINK_DB_PASSWORD}}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -19,7 +19,7 @@ spring:
 app:
   base-url: http://localhost:8080
   jwt:
-    secret: changeme-replace-with-256-bit-secret
+    secret: ${NANOLINK_JWT_SECRET}
     expiration-ms: 604800000
 
 server:
