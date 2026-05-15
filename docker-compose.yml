@@ -1,0 +1,35 @@
+services:
+  db:
+    image: postgres:18.3
+    container_name: nanolink-postgres
+    environment:
+      POSTGRES_DB: nanolink_db
+      POSTGRES_USER: nanolink_user
+      POSTGRES_PASSWORD: ${NANOLINK_DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - nanolink_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nanolink_user -d nanolink_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+    container_name: nanolink-app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/nanolink_db
+      SPRING_DATASOURCE_USERNAME: nanolink_user
+      SPRING_DATASOURCE_PASSWORD: ${NANOLINK_DB_PASSWORD}
+      NANOLINK_JWT_SECRET: ${NANOLINK_JWT_SECRET}
+    ports:
+      - "8080:8080"
+
+volumes:
+  nanolink_pgdata:
