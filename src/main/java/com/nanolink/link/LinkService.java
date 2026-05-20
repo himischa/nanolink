@@ -113,7 +113,7 @@ public class LinkService {
         }
     }
 
-    private String generateUniqueShortCode() {
+    String generateUniqueShortCode() {
         for (int i = 0; i < SHORT_CODE_RETRY_LIMIT; i++) {
             String code = ShortCodeGenerator.generate();
             if (!linkRepository.existsByShortCode(code)) {
