@@ -12,9 +12,9 @@ import com.nanolink.user.User;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
@@ -25,8 +25,12 @@ class LinkServiceTest {
     @Mock
     private LinkRepository linkRepository;
 
-    @InjectMocks
-    private LinkService linkService = new LinkService(linkRepository, "http://localhost:8080");
+    private LinkService linkService;
+
+    @BeforeEach
+    void setUp() {
+        linkService = new LinkService(linkRepository, "http://localhost:8080");
+    }
 
     @Test
     void createLink_withValidData_returnsLinkResponse() {
