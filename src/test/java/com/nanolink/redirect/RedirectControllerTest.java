@@ -1,34 +1,38 @@
 package com.nanolink.redirect;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.nanolink.analytics.ClickEventRepository;
 import com.nanolink.link.Link;
 import com.nanolink.link.LinkRepository;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = RedirectController.class)
-@AutoConfigureMockMvc(addFilters = false)
+@ExtendWith(MockitoExtension.class)
 class RedirectControllerTest {
-    @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @Mock
     private LinkRepository linkRepository;
 
-    @MockBean
+    @Mock
     private ClickEventRepository clickEventRepository;
+
+    @BeforeEach
+    void setUp() {
+        RedirectController controller = new RedirectController(linkRepository, clickEventRepository);
+        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+    }
 
     @Test
     void redirect_withValidCode_returns302() throws Exception {
