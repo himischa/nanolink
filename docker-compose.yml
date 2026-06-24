@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:18.3
+    image: postgres:18
     container_name: nanolink-postgres
     environment:
       POSTGRES_DB: nanolink_db
